@@ -1,0 +1,16 @@
+{
+    "command_play": "avvia",
+    "command_stop": "stop",
+    "command_pause": "ferma",
+    "command_resume": "riprendi",
+    "command_play_description": "Riproduci un video o una traccia audio.",
+    "command_play_youtube_description": "Riproduci un video da YouTube.",
+    "command_play_youtube_url_description": "L'URL del video YouTube da riprodurre.",
+    "command_stop_description": "Stoppa il bot.",
+    "command_pause_description": "Ferma il bot.",
+    "command_resume_description": "Riprendi.",
+    "command_invalid_interaction": "Interazione non valida.",
+    "command_user_is_not_in_channel": "Devi essere in un canale vocale per poter usare questa interazione.",
+    "command_user_is_not_in_bot_channel": "Devi essere nello stesso canale vocale del bot per poter usare questa interazione.",
+    "command_done": "Fatto."
+}

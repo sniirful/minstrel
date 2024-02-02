@@ -1,0 +1,16 @@
+{
+    "command_play": "play",
+    "command_stop": "stop",
+    "command_pause": "pause",
+    "command_resume": "resume",
+    "command_play_description": "Play a video or audio.",
+    "command_play_youtube_description": "Play a video from YouTube.",
+    "command_play_youtube_url_description": "The URL of the YouTube video to play.",
+    "command_stop_description": "Stop the bot.",
+    "command_pause_description": "Pause the bot.",
+    "command_resume_description": "Resume the bot.",
+    "command_invalid_interaction": "Invalid interaction.",
+    "command_user_is_not_in_channel": "You must be in a voice channel before using this interaction.",
+    "command_user_is_not_in_bot_channel": "You must be in the same voice channel as the bot to use this interaction.",
+    "command_done": "Done."
+}
