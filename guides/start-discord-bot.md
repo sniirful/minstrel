@@ -16,7 +16,9 @@ To ensure that the bot works just as intended, Minstrel is using Docker, which i
 ## Installing prerequisites
 ### Linux
 To show how to install docker on Linux, we will make use of the [official Docker Engine installation page](https://docs.docker.com/engine/install/ubuntu/). For this demo, we're going to use Ubuntu as a reference since it's what most people will use, but on the left you can find a couple more distributions if needed. If yours doesn't appear on that list, please refer to the documentation of your distribution in order to install Docker and skip to the next step.
-Please be very careful when following this guide, Docker Engine installation might change in the future and this guide may not be updated immediately or at all, and the mere copy-and-paste of the commands you'll find below might actually make your system unusable. Proceed with caution.
+
+> Please be very careful when following this guide, Docker Engine installation might change in the future and this guide may not be updated immediately or at all, and the mere copy-and-paste of the commands you'll find below might actually make your system unusable. Proceed with caution.
+
 Moving on, we first need to set up the repository to tell our system where it will download the Docker executables from:
 ```bash
 # Add Docker's official GPG key:
@@ -65,6 +67,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 If it doesn't, search for more information online before proceeding. If it does, you can perform the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/).
+
 Create the `docker` group:
 ```bash
 sudo groupadd docker
@@ -95,6 +98,7 @@ After doing so, just run the following command:
 docker compose up --build
 ```
 And it will start installing all the necessary dependencies. To stop it, issue `Ctrl`+`C`.
+
 Optional: if you want your bot to run in the background and to be able to close the terminal window, just run:
 ```bash
 docker compose up -d --build
