@@ -1,16 +1,16 @@
 # Overview
 In this section you'll learn how to start Minstrel and all its requisites.
 ## Index
-- [What you'll need](TODO)
-- [Installing prerequisites](TODO)
-	- [Linux]()
-	- [Windows]()
-	- [MacOS]()
-- [Downloading the necessary files](TODO)
-- [Starting the bot](TODO)
-	- [Linux]()
-	- [Windows]()
-	- [MacOS]()
+- [What you'll need](#what-youll-need)
+- [Installing prerequisites](#installing-prerequisites)
+	- [Linux](#linux)
+	- [Windows](#windows)
+	- [MacOS](#macos)
+- [Downloading the necessary files](#downloading-the-necessary-files)
+- [Starting the bot](#starting-the-bot)
+	- [Linux](#linux-1)
+	- [Windows](#windows-1)
+	- [MacOS](#macos-1)
 ## What you'll need
 To ensure that the bot works just as intended, Minstrel is using Docker, which is a platform that allows everyone on any operating system to run the same exact programs. In the next sections you will learn how to install it and how to use it.
 ## Installing prerequisites

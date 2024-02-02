@@ -11,8 +11,8 @@ Minstrel is a self-hosted Discord music bot which supports virtually any streami
 | Play music from SoundCloud | ❌ |
 ## How to setup
 You can check the following useful links:
-- [How to create a new Discord bot](TODO)
-- [How to create a configuration file](TODO)
-- [How to run Minstrel](TODO)
+- [How to create a new Discord bot](https://github.com/sniirful/minstrel/blob/main/guides/create-discord-bot.md)
+- [How to create a configuration file](https://github.com/sniirful/minstrel/blob/main/guides/create-configuration-file.md)
+- [How to run Minstrel](https://github.com/sniirful/minstrel/blob/main/guides/start-discord-bot.md)
 ## Notes
 \* You can avoid ads by using your own account with a subscription.
