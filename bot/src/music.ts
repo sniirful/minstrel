@@ -10,8 +10,8 @@ let guilds: Record<string, {
     channel: discord.VoiceBasedChannel,
     connection: discordVoice.VoiceConnection,
     player: discordVoice.AudioPlayer,
-    page: Page,
-    stream: Transform,
+    page?: Page,
+    stream?: Transform,
 }> = {};
 
 // initialize the browser
@@ -85,15 +85,55 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
     };
 }
 
+async function playFromSoundboard(channel: discord.VoiceBasedChannel, filePath: string) {
+    let guild = channel.guild;
+
+    // if it is already playing, stop everything
+    if (guilds[guild.id]) {
+        await stopGently(channel.guild);
+    }
+
+    let connection = discordVoice.joinVoiceChannel({
+        channelId: channel.id,
+        guildId: channel.guild.id,
+        adapterCreator: channel.guild.voiceAdapterCreator,
+    });
+    connection.on('error', async err => {
+        // TODO
+        await stop(channel.guild);
+    });
+
+    let player = discordVoice.createAudioPlayer();
+    player.on('error', async err => {
+        // TODO
+        await stop(channel.guild);
+    });
+
+    let resource = discordVoice.createAudioResource(filePath);
+    resource.playStream.on('error', async err => {
+        // TODO
+        await stop(channel.guild);
+    });
+
+    player.play(resource);
+    connection.subscribe(player);
+
+    guilds[guild.id] = {
+        channel,
+        connection,
+        player,
+    };
+}
+
 async function stopGently(guild: discord.Guild) {
     guilds[guild.id].player.stop(true);
-    await guilds[guild.id].page.close();
+    await guilds[guild.id].page?.close();
 }
 
 async function stop(guild: discord.Guild) {
     guilds[guild.id].player.stop(true);
     guilds[guild.id].connection.destroy();
-    await guilds[guild.id].page.close();
+    await guilds[guild.id].page?.close();
 
     delete guilds[guild.id];
 }
@@ -113,6 +153,7 @@ function getActiveChannel(guild: discord.Guild): discord.VoiceBasedChannel | nul
 
 export default {
     play,
+    playFromSoundboard,
     stop,
     pause,
     resume,

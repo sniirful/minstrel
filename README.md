@@ -5,6 +5,7 @@ Minstrel is a self-hosted Discord music bot which supports virtually any streami
 |---------|-----------|
 | Play audio from YouTube | ✅ |
 | Play audio from any website with autoplay | ✅ |
+| Use the bot as a custom Discord soundboard | ✅ |
 | Skip YouTube ads* | ❌ |
 | Search YouTube videos/songs by name | ❌ |
 | Play music from Spotify | ❌ |

@@ -6,12 +6,15 @@ import discord from 'discord.js';
 import music from './music';
 import members from './members';
 import { lang } from './languages';
+import soundboard, { SOUNDBOARD_CUSTOM_ID_PREFIX } from './soundboard';
+import voiceChannels from './voice-channels';
 
 const interactionsNames = {
     PLAY: lang.command_play,
     STOP: lang.command_stop,
     PAUSE: lang.command_pause,
     RESUME: lang.command_resume,
+    SOUNDBOARD: lang.command_soundboard,
 };
 
 const interactions = [
@@ -119,6 +122,65 @@ const interactions = [
             music.resume(interaction.guild!!);
             await interaction.editReply(lang.command_done);
         },
+    },
+    {
+        name: interactionsNames.SOUNDBOARD,
+        // if this property is set to true, then automatically:
+        // - interaction.channel
+        // - interaction.guild
+        // - members.get(interaction.guild, interaction.user.id)?.voice.channel
+        // all exist and are neither null nor undefined
+        requiresVoiceChannel: false,
+        slash: new discord.SlashCommandBuilder()
+            .setName(interactionsNames.SOUNDBOARD)
+            .setDescription(lang.command_soundboard_description),
+        callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
+            await interaction.deferReply();
+
+            // we first get all the buttons inside one array
+            let buttons: discord.ButtonBuilder[] = [];
+            for (let soundboardItem of soundboard.getAll()) {
+                buttons.push(new discord.ButtonBuilder()
+                    .setCustomId(`${SOUNDBOARD_CUSTOM_ID_PREFIX}${soundboardItem.fullName}`)
+                    .setLabel(soundboardItem.name)
+                    .setStyle(discord.ButtonStyle.Secondary)
+                );
+                if (soundboardItem.emoji) {
+                    buttons[buttons.length - 1].setEmoji(soundboardItem.emoji);
+                }
+            }
+
+            // after that, we divide them up into different rows
+            let rows: discord.ActionRowBuilder<discord.ButtonBuilder>[] = [];
+            for (let i = 0; i < buttons.length; i++) {
+                // 5 is the max amount of buttons a row can have
+                if (i % 5 === 0) {
+                    rows.push(new discord.ActionRowBuilder<discord.ButtonBuilder>());
+                }
+
+                rows[rows.length - 1].addComponents(buttons[i]);
+            }
+
+            // after that, we divide these rows into different messages
+            let messagesContents: discord.ActionRowBuilder<discord.ButtonBuilder>[][] = [];
+            for (let i = 0; i < rows.length; i++) {
+                // each message can have up to 5 rows
+                if (i % 5 === 0) {
+                    messagesContents.push([]);
+                }
+
+                messagesContents[messagesContents.length - 1].push(rows[i]);
+            }
+
+            // eventually, we print all the messages
+            for (let messageContents of messagesContents) {
+                interaction.channel?.send({
+                    components: [...messageContents],
+                });
+            }
+
+            await interaction.editReply(lang.command_done);
+        },
     }
 ];
 
@@ -131,26 +193,7 @@ export async function execute(client: discord.Client, interaction: discord.ChatI
     if (!i) return;
 
     if (i.requiresVoiceChannel) {
-        if (!interaction.channel) {
-            await interaction.reply(lang.command_invalid_interaction);
-            return;
-        }
-        if (!interaction.guild) {
-            await interaction.reply(lang.command_invalid_interaction);
-            return;
-        }
-
-        let channel = members.get(interaction.guild, interaction.user.id)?.voice.channel;
-        if (!channel) {
-            await interaction.reply(lang.command_user_is_not_in_channel);
-            return;
-        }
-
-        // only check this if the allowed_channels property does actually
-        // contain something. if nothing is there, then all channels are
-        // allowed
-        if (configuration.allowed_channels.length > 0 && !configuration.allowed_channels.includes(channel.id)) {
-            await interaction.reply(lang.command_voice_channel_not_authorized);
+        if (!(await voiceChannels.assertRequired(interaction))) {
             return;
         }
     }

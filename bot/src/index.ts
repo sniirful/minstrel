@@ -4,6 +4,7 @@ const configuration = _configuration as Configuration;
 
 import discord from 'discord.js';
 import { execute as executeCommandInteraction } from './command-interactions';
+import { execute as executeButtonInteraction } from './button-interactions';
 import interactions from './interactions';
 
 const client = new discord.Client({ intents: [discord.GatewayIntentBits.Guilds, discord.GatewayIntentBits.GuildVoiceStates] });
@@ -11,7 +12,9 @@ const client = new discord.Client({ intents: [discord.GatewayIntentBits.Guilds, 
 // wait for interactions, that is button clicks or commands
 client.on('interactionCreate', async interaction => {
     try {
-        if (interaction.isChatInputCommand()) {
+        if (interaction.isButton()) {
+            await executeButtonInteraction(client, interaction);
+        } else if (interaction.isChatInputCommand()) {
             await executeCommandInteraction(client, interaction);
         }
     } catch { }
