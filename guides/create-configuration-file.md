@@ -22,6 +22,8 @@ Where:
 - \<language\>
 
 are the settings of this application.
+
+Start by opening any text editor (e.g. Notepad on Windows) and pasting the above text to add the missing pieces in each of the following sections.
 ## The token setting
 The token is a special set of random letters and numbers that uniquely identifies your bot. It is used to let Minstrel log into the bot's account and perform actions on its behalf.
 
@@ -37,7 +39,7 @@ Once you click on it, a popup will appear. Just click on "Yes, do it!".
 
 ![](https://github.com/sniirful/minstrel/blob/main/guides/res/create-configuration-file-3.png?raw=true)
 
-If prompted, enter your 2FA authentication code. You can now see your bot's token.
+If prompted, enter your Discord login 2FA authentication code. You can now see your bot's token.
 
 ![](https://github.com/sniirful/minstrel/blob/main/guides/res/create-configuration-file-4.png?raw=true)
 
@@ -55,7 +57,7 @@ This bot currently supports the following languages:
 - `enUS` (English - US, the default)
 - `itIT` (Italian - IT)
 
-Pick the one you prefer on your server and replace `language` with it in the structure.
+Pick the one you prefer on your server and replace `<language>` with it in the structure.
 ## The final JSON structure
 In the end, your JSON structure should look something like this:
 ```json
@@ -66,4 +68,4 @@ In the end, your JSON structure should look something like this:
 }
 ```
 ## Moving on
-You can now save this structure for later when you're [starting Minstrel](https://github.com/sniirful/minstrel/blob/main/guides/start-discord-bot.md).
+You can now save this structure in a file for later use when you're [starting Minstrel](https://github.com/sniirful/minstrel/blob/main/guides/start-discord-bot.md).
