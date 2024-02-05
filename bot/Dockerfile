@@ -14,4 +14,4 @@ RUN npm i
 COPY . .
 RUN tsc
 
-CMD xvfb-run --server-args="-screen 0 1024x768x24" node src
+CMD xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" node src
