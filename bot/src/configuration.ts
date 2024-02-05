@@ -5,6 +5,5 @@ interface Configuration {
     allowed_channels: string[];
 }
 
-export {
-    Configuration
-};
+import configuration from './configuration.json';
+export default configuration as Configuration;

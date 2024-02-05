@@ -1,7 +1,4 @@
-import { Configuration } from './interfaces';
-import _configuration from './configuration.json';
-const configuration = _configuration as Configuration;
-
+import configuration from './configuration';
 import discord from 'discord.js';
 import members from './members';
 import { lang } from './languages';
