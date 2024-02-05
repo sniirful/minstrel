@@ -12,5 +12,6 @@
     "command_invalid_interaction": "Interazione non valida.",
     "command_user_is_not_in_channel": "Devi essere in un canale vocale per poter usare questa interazione.",
     "command_user_is_not_in_bot_channel": "Devi essere nello stesso canale vocale del bot per poter usare questa interazione.",
+    "command_voice_channel_not_authorized": "Questo canale non è stato autorizzato dall'host del bot.",
     "command_done": "Fatto."
 }

@@ -19,6 +19,7 @@ interface Language {
     command_invalid_interaction: string;
     command_user_is_not_in_channel: string;
     command_user_is_not_in_bot_channel: string;
+    command_voice_channel_not_authorized: string;
     command_done: string;
 }
 

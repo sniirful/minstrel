@@ -12,5 +12,6 @@
     "command_invalid_interaction": "Invalid interaction.",
     "command_user_is_not_in_channel": "You must be in a voice channel before using this interaction.",
     "command_user_is_not_in_bot_channel": "You must be in the same voice channel as the bot to use this interaction.",
+    "command_voice_channel_not_authorized": "This channel is not allowed by the host of the bot.",
     "command_done": "Done."
 }

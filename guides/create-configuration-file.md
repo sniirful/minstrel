@@ -5,6 +5,7 @@ In this section you'll learn how to create a configuration file for Minstrel, wi
 - [The token setting](#the-token-setting)
 - [The client ID setting](#the-client-id-setting)
 - [The language setting](#the-language-setting)
+- [The allowed channels setting](#the-allowed-channels-setting)
 - [The final JSON structure](#the-final-json-structure)
 - [Moving on](#moving-on)
 ## Structure of the configuration file
@@ -13,7 +14,8 @@ The configuration file is in JSON format, and will look like this:
 {
     "token": "<token>",
     "client_id": "<client_id>",
-    "language": "<language>"
+    "language": "<language>",
+    "allowed_channels": []
 }
 ```
 Where:
@@ -58,13 +60,18 @@ This bot currently supports the following languages:
 - `itIT` (Italian - IT)
 
 Pick the one you prefer on your server and replace `<language>` with it in the structure.
+## The allowed channels setting
+This setting is an array of channel IDs that you can get by right-clicking a channel and clicking "Copy Channel ID". This only affects voice channels.
+
+Further documentation is TODO.
 ## The final JSON structure
 In the end, your JSON structure should look something like this:
 ```json
 {
     "token": "MTIwMjY2NDgzNzU5NjA1NzcxMA.GPkl8I.435ny574nA2M2AicKPEPZD9K48f8nMxBxYyKRE",
     "client_id": "1202664837596057710",
-    "language": "enUS"
+    "language": "enUS",
+    "allowed_channels": []
 }
 ```
 ## Moving on
