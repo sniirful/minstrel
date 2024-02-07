@@ -1,43 +1,27 @@
 import discord from 'discord.js';
-import puppeteer from 'puppeteer';
-import { launch as launchBrowser, getStream as getPuppeteerStream } from 'puppeteer-stream';
-import { Browser, Page } from 'puppeteer-stream/node_modules/puppeteer-core';
-import { Transform } from 'stream';
+import * as browserWrapper from './browser-wrapper';
 import * as discordVoice from '@discordjs/voice';
 import cookies from './cookies';
 
 let guilds: Record<string, {
     connection: discordVoice.VoiceConnection,
     player: discordVoice.AudioPlayer,
-    page?: Page,
-    stream?: Transform,
+    page?: browserWrapper.Page,
+    stream?: browserWrapper.Transform,
 }> = {};
 
-// initialize the browser
-let browser: Browser;
-(async () => {
-    browser = await launchBrowser({
-        defaultViewport: {
-            width: 1920,
-            height: 1080,
-        },
-        headless: false,
-        executablePath: puppeteer.executablePath(),
-        args: ['--no-sandbox'],
-    });
-})();
-
 async function getStream(url: string, websiteType: string): Promise<{
-    page: Page,
-    stream: Transform,
+    page: browserWrapper.Page,
+    stream: browserWrapper.Transform,
 }> {
+    let browser = await browserWrapper.getBrowser();
     let page = await browser.newPage();
     await page.setCookie(...(cookies.getByWebsiteType(websiteType)));
     await page.goto(url);
 
     return {
         page,
-        stream: await getPuppeteerStream(page, { audio: true, video: false }),
+        stream: await browserWrapper.getPuppeteerStream(page, { audio: true, video: false }),
     };
 }
 
