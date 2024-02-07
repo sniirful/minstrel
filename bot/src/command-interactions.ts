@@ -1,10 +1,10 @@
-import configuration from './configuration';
 import discord from 'discord.js';
 import music from './music';
 import members from './members';
 import { lang } from './languages';
 import soundboard, { SOUNDBOARD_CUSTOM_ID_PREFIX } from './soundboard';
 import voiceChannels from './voice-channels';
+import search from './search';
 
 const interactionsNames = {
     PLAY: lang.command_play,
@@ -26,11 +26,14 @@ const interactions = [
         slash: new discord.SlashCommandBuilder()
             .setName(interactionsNames.PLAY)
             .setDescription(lang.command_play_description)
-            .addSubcommand(subcommand => subcommand.setName('youtube')
+            .addSubcommand(subcommand => subcommand.setName(lang.command_play_youtube)
                 .setDescription(lang.command_play_youtube_description)
-                .addStringOption(option => option.setName('url')
+                .addStringOption(option => option.setName(lang.command_play_youtube_url)
                     .setDescription(lang.command_play_youtube_url_description)
-                    .setRequired(true))),
+                    .setRequired(false))
+                .addStringOption(option => option.setName(lang.command_play_youtube_title)
+                    .setDescription(lang.command_play_youtube_url_description)
+                    .setRequired(false))),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
             let botChannel = (client.user?.id)
@@ -42,9 +45,27 @@ const interactions = [
                 return;
             }
 
-            await interaction.deferReply();
-            await music.play(channel, interaction.options.getString('url', true), interaction.options.getSubcommand(true));
-            await interaction.editReply(lang.command_done);
+            let url = interaction.options.getString(lang.command_play_youtube_url, false);
+            let title = interaction.options.getString(lang.command_play_youtube_title, false);
+            if (url === null && title === null) {
+                await interaction.reply(lang.command_play_youtube_url_or_title_required);
+                return;
+            }
+
+            if (url !== null) {
+                await interaction.deferReply();
+                await music.play(channel, url, interaction.options.getSubcommand(true));
+                await interaction.editReply(lang.command_done);
+            } else if (title !== null) {
+                await interaction.deferReply();
+                let foundURL = await search.youtube(title);
+                if (!foundURL) {
+                    await interaction.reply(lang.command_play_youtube_title_no_video_found);
+                    return;
+                }
+                await music.play(channel, foundURL, interaction.options.getSubcommand(true));
+                await interaction.editReply(`${lang.command_play_youtube_title_now_playing}${foundURL}`);
+            }
         },
     },
     {
