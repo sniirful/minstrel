@@ -33,9 +33,11 @@ const interactions = [
                     .setRequired(true))),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
+            let botChannel = (client.user?.id)
+                ? (members.get(interaction.guild!!, client.user.id)?.voice.channel)
+                : (null);
 
-            let activeChannel = music.getActiveChannel(interaction.guild!!);
-            if (activeChannel != null && channel.id !== activeChannel.id) {
+            if (botChannel != null && channel.id !== botChannel.id) {
                 await interaction.reply(lang.command_user_is_not_in_bot_channel);
                 return;
             }
@@ -58,9 +60,11 @@ const interactions = [
             .setDescription(lang.command_stop_description),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
+            let botChannel = (client.user?.id)
+                ? (members.get(interaction.guild!!, client.user.id)?.voice.channel)
+                : (null);
 
-            let activeChannel = music.getActiveChannel(interaction.guild!!);
-            if (activeChannel != null && channel.id !== activeChannel.id) {
+            if (botChannel != null && channel.id !== botChannel.id) {
                 await interaction.reply(lang.command_user_is_not_in_bot_channel);
                 return;
             }
@@ -83,9 +87,11 @@ const interactions = [
             .setDescription(lang.command_pause_description),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
+            let botChannel = (client.user?.id)
+                ? (members.get(interaction.guild!!, client.user.id)?.voice.channel)
+                : (null);
 
-            let activeChannel = music.getActiveChannel(interaction.guild!!);
-            if (activeChannel != null && channel.id !== activeChannel.id) {
+            if (botChannel != null && channel.id !== botChannel.id) {
                 await interaction.reply(lang.command_user_is_not_in_bot_channel);
                 return;
             }
@@ -108,9 +114,11 @@ const interactions = [
             .setDescription(lang.command_resume_description),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
+            let botChannel = (client.user?.id)
+                ? (members.get(interaction.guild!!, client.user.id)?.voice.channel)
+                : (null);
 
-            let activeChannel = music.getActiveChannel(interaction.guild!!);
-            if (activeChannel != null && channel.id !== activeChannel.id) {
+            if (botChannel != null && channel.id !== botChannel.id) {
                 await interaction.reply(lang.command_user_is_not_in_bot_channel);
                 return;
             }

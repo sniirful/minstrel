@@ -7,7 +7,6 @@ import * as discordVoice from '@discordjs/voice';
 import cookies from './cookies';
 
 let guilds: Record<string, {
-    channel: discord.VoiceBasedChannel,
     connection: discordVoice.VoiceConnection,
     player: discordVoice.AudioPlayer,
     page?: Page,
@@ -77,7 +76,6 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
     connection.subscribe(player);
 
     guilds[guild.id] = {
-        channel,
         connection,
         player,
         page,
@@ -119,7 +117,6 @@ async function playFromSoundboard(channel: discord.VoiceBasedChannel, filePath: 
     connection.subscribe(player);
 
     guilds[guild.id] = {
-        channel,
         connection,
         player,
     };
@@ -146,16 +143,10 @@ function resume(guild: discord.Guild) {
     guilds[guild.id].player.unpause();
 }
 
-function getActiveChannel(guild: discord.Guild): discord.VoiceBasedChannel | null {
-    if (!guilds[guild.id]) return null;
-    return guilds[guild.id].channel;
-}
-
 export default {
     play,
     playFromSoundboard,
     stop,
     pause,
     resume,
-    getActiveChannel,
 };
