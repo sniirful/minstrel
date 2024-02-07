@@ -58,6 +58,18 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
         // TODO
         await stop(channel.guild);
     });
+    connection.on(discordVoice.VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+        // https://discordjs.guide/voice/voice-connections.html#handling-disconnects
+        try {
+            await Promise.race([
+                discordVoice.entersState(connection, discordVoice.VoiceConnectionStatus.Signalling, 5_000),
+                discordVoice.entersState(connection, discordVoice.VoiceConnectionStatus.Connecting, 5_000),
+            ]);
+            // Seems to be reconnecting to a new channel - ignore disconnect
+        } catch (error) {
+            stop(guild);
+        }
+    });
 
     let player = discordVoice.createAudioPlayer();
     player.on('error', async err => {
