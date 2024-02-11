@@ -33,6 +33,14 @@ const interactions = [
                     .setRequired(false))
                 .addStringOption(option => option.setName(lang.command_play_youtube_title)
                     .setDescription(lang.command_play_youtube_url_description)
+                    .setRequired(false)))
+            .addSubcommand(subcommand => subcommand.setName(lang.command_play_youtubemusic)
+                .setDescription(lang.command_play_youtubemusic_description)
+                .addStringOption(option => option.setName(lang.command_play_youtubemusic_url)
+                    .setDescription(lang.command_play_youtubemusic_url_description)
+                    .setRequired(false))
+                .addStringOption(option => option.setName(lang.command_play_youtubemusic_title)
+                    .setDescription(lang.command_play_youtubemusic_url_description)
                     .setRequired(false))),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
@@ -48,24 +56,31 @@ const interactions = [
             let url = interaction.options.getString(lang.command_play_youtube_url, false);
             let title = interaction.options.getString(lang.command_play_youtube_title, false);
             if (url === null && title === null) {
-                await interaction.reply(lang.command_play_youtube_url_or_title_required);
+                await interaction.reply(lang.command_play_any_url_or_title_required);
                 return;
             }
 
+            await interaction.deferReply();
+            let type = interaction.options.getSubcommand(true);
             if (url !== null) {
-                await interaction.deferReply();
-                await music.play(channel, url, interaction.options.getSubcommand(true));
+                await music.play(channel, url, type);
                 await interaction.editReply(lang.command_done);
-            } else if (title !== null) {
-                await interaction.deferReply();
-                let foundURL = await search.youtube(title);
-                if (!foundURL) {
-                    await interaction.reply(lang.command_play_youtube_title_no_video_found);
-                    return;
-                }
-                await music.play(channel, foundURL, interaction.options.getSubcommand(true));
-                await interaction.editReply(`${lang.command_play_youtube_title_now_playing}${foundURL}`);
+                return;
             }
+            if (title === null) {
+                // here, title cannot be null since either url or
+                // title is mandatory; it will go ahead without
+                // problems
+                return;
+            }
+
+            let foundURL = await search.byWebsiteType(type, title);
+            if (!foundURL) {
+                await interaction.reply(lang.command_play_any_title_no_video_found);
+                return;
+            }
+            await music.play(channel, foundURL, type);
+            await interaction.editReply(`${lang.command_play_any_title_now_playing}${foundURL}`);
         },
     },
     {

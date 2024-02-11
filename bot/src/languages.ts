@@ -15,9 +15,15 @@ interface Language {
     command_play_youtube_url_description: string;
     command_play_youtube_title: string;
     command_play_youtube_title_description: string;
-    command_play_youtube_url_or_title_required: string;
-    command_play_youtube_title_no_video_found: string;
-    command_play_youtube_title_now_playing: string;
+    command_play_youtubemusic: string;
+    command_play_youtubemusic_description: string;
+    command_play_youtubemusic_url: string;
+    command_play_youtubemusic_url_description: string;
+    command_play_youtubemusic_title: string;
+    command_play_youtubemusic_title_description: string;
+    command_play_any_url_or_title_required: string;
+    command_play_any_title_no_video_found: string;
+    command_play_any_title_now_playing: string;
     command_stop_description: string;
     command_pause_description: string;
     command_resume_description: string;
