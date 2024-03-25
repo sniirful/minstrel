@@ -4,3 +4,4 @@ services:
     build: ./bot
     volumes:
       - ./soundboard:/soundboard:ro
+      - ./custom-cookies:/custom-cookies:ro

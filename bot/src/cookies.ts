@@ -13,12 +13,17 @@ function getByWebsiteType(type: string): any {
 }
 
 function getYouTubeCookies(): any {
-    let cookies = fs.readFileSync(path.join(__dirname, 'cookies/youtube.json'), { encoding: 'utf-8' });
-    return JSON.parse(cookies);
+    return getCookies('youtube');
 }
 
 function getYouTubeMusicCookies(): any {
-    let cookies = fs.readFileSync(path.join(__dirname, 'cookies/youtube-music.json'), { encoding: 'utf-8' });
+    return getCookies('youtube-music');
+}
+
+function getCookies(filename: string): any {
+    let cookies = (fs.existsSync(`/custom-cookies/${filename}.json`))
+        ? fs.readFileSync(`/custom-cookies/${filename}.json`, { encoding: 'utf-8' })
+        : fs.readFileSync(path.join(__dirname, 'cookies', `${filename}.json`), { encoding: 'utf-8' });
     return JSON.parse(cookies);
 }
 
