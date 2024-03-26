@@ -51,7 +51,7 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
             ]);
             // Seems to be reconnecting to a new channel - ignore disconnect
         } catch (error) {
-            stop(guild);
+            await stop(guild);
         }
     });
 
@@ -119,24 +119,42 @@ async function playFromSoundboard(channel: discord.VoiceBasedChannel, filePath: 
 }
 
 async function stopGently(guild: discord.Guild) {
-    guilds[guild.id].player.stop(true);
-    await guilds[guild.id].page?.close();
+    // we want to avoid any errors that might
+    // happen
+    try {
+        guilds[guild.id].player.stop(true);
+        await guilds[guild.id].page?.close();
+    } catch { }
 }
 
 async function stop(guild: discord.Guild) {
-    guilds[guild.id].player.stop(true);
-    guilds[guild.id].connection.destroy();
-    await guilds[guild.id].page?.close();
+    // we want to avoid any errors that might
+    // happen when trying to stop the player,
+    // because for instance the destroy method
+    // might be called twice and it will throw
+    try {
+        guilds[guild.id].player.stop(true);
+        guilds[guild.id].connection.destroy();
+        await guilds[guild.id].page?.close();
 
-    delete guilds[guild.id];
+        delete guilds[guild.id];
+    } catch { }
 }
 
 function pause(guild: discord.Guild) {
-    guilds[guild.id].player.pause();
+    // making sure that this cannot make the
+    // bot crash
+    try {
+        guilds[guild.id].player.pause();
+    } catch { }
 }
 
 function resume(guild: discord.Guild) {
-    guilds[guild.id].player.unpause();
+    // making sure that this cannot make the
+    // bot crash
+    try {
+        guilds[guild.id].player.unpause();
+    } catch { }
 }
 
 export default {
