@@ -32,7 +32,7 @@ const interactions = [
                     .setDescription(lang.command_play_youtube_url_description)
                     .setRequired(false))
                 .addStringOption(option => option.setName(lang.command_play_youtube_title)
-                    .setDescription(lang.command_play_youtube_url_description)
+                    .setDescription(lang.command_play_youtube_title_description)
                     .setRequired(false)))
             .addSubcommand(subcommand => subcommand.setName(lang.command_play_youtubemusic)
                 .setDescription(lang.command_play_youtubemusic_description)
@@ -40,7 +40,7 @@ const interactions = [
                     .setDescription(lang.command_play_youtubemusic_url_description)
                     .setRequired(false))
                 .addStringOption(option => option.setName(lang.command_play_youtubemusic_title)
-                    .setDescription(lang.command_play_youtubemusic_url_description)
+                    .setDescription(lang.command_play_youtubemusic_title_description)
                     .setRequired(false))),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
