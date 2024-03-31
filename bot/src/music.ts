@@ -16,13 +16,15 @@ async function getStream(url: string, websiteType: string): Promise<{
 }> {
     let browser = await browserWrapper.getBrowser();
     let page = await browser.newPage();
+    let stream = await browserWrapper.getPuppeteerStream(page, { audio: true, video: false });
+
     await page.setCookie(...(cookies.getByWebsiteType(websiteType)));
     await page.goto(url);
     await cookies.track(page, websiteType);
 
     return {
         page,
-        stream: await browserWrapper.getPuppeteerStream(page, { audio: true, video: false }),
+        stream,
     };
 }
 
