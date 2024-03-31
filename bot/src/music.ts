@@ -18,6 +18,7 @@ async function getStream(url: string, websiteType: string): Promise<{
     let page = await browser.newPage();
     await page.setCookie(...(cookies.getByWebsiteType(websiteType)));
     await page.goto(url);
+    await cookies.track(page, websiteType);
 
     return {
         page,

@@ -5,4 +5,4 @@ services:
     restart: unless-stopped
     volumes:
       - ./soundboard:/soundboard:ro
-      - ./custom-cookies:/custom-cookies:ro
+      - ./custom-cookies:/custom-cookies:rw
