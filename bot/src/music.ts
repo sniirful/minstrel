@@ -41,6 +41,9 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
         guildId: channel.guild.id,
         adapterCreator: channel.guild.voiceAdapterCreator,
     });
+    // removing all listeners to avoid memory leaks
+    // as discord may recycle the connection object
+    connection.removeAllListeners();
     connection.on('error', async err => {
         // TODO
         await stop(channel.guild);
