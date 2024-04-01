@@ -40,11 +40,11 @@ const interactions = [
                 .addStringOption(option => option.setName(lang.command_play_youtubemusic_url)
                     .setDescription(lang.command_play_youtubemusic_url_description)
                     .setRequired(false))
-                .addBooleanOption(option => option.setName(lang.command_play_youtubemusic_lyrics)
-                    .setDescription(lang.command_play_youtubemusic_lyrics_description)
-                    .setRequired(false))
                 .addStringOption(option => option.setName(lang.command_play_youtubemusic_title)
                     .setDescription(lang.command_play_youtubemusic_title_description)
+                    .setRequired(false))
+                .addBooleanOption(option => option.setName(lang.command_play_youtubemusic_lyrics)
+                    .setDescription(lang.command_play_youtubemusic_lyrics_description)
                     .setRequired(false))),
         callback: async (client: discord.Client, interaction: discord.ChatInputCommandInteraction) => {
             let channel = members.get(interaction.guild!!, interaction.user.id)?.voice.channel!!;
@@ -57,9 +57,11 @@ const interactions = [
                 return;
             }
 
-            let url = interaction.options.getString(lang.command_play_youtube_url, false);
-            let title = interaction.options.getString(lang.command_play_youtube_title, false);
-            let showLyrics = interaction.options.getBoolean(lang.command_play_youtubemusic_lyrics, false);
+            // TODO: find a way to make this code more readable
+            let url = interaction.options.getString(lang.command_play_youtube_url, false)
+                || interaction.options.getString(lang.command_play_youtubemusic_url, false);
+            let title = interaction.options.getString(lang.command_play_youtube_title, false)
+                || interaction.options.getString(lang.command_play_youtubemusic_title, false);
             if (url === null && title === null) {
                 await interaction.reply(lang.command_play_any_url_or_title_required);
                 return;
@@ -81,11 +83,14 @@ const interactions = [
 
             // this next part is only executed if the user
             // wants to see the lyrics
+            let showLyrics = interaction.options.getBoolean(lang.command_play_youtubemusic_lyrics, false);
             if (!showLyrics) return;
             let textChannel = interaction.channel;
             if (!textChannel) return;
 
-            // TODO FIX THE MESSAGES!!!
+            // TODO: for now the only possible type is youtubemusic,
+            // meaning we do not need to specify any other language
+            // strings
             let message = await textChannel.send(lang.command_play_youtubemusic_lyrics_searching);
             let foundLyrics = await lyrics.find(page, type);
 
