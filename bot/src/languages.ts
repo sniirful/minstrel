@@ -21,6 +21,12 @@ interface Language {
     command_play_youtubemusic_url_description: string;
     command_play_youtubemusic_title: string;
     command_play_youtubemusic_title_description: string;
+    command_play_youtubemusic_lyrics: string;
+    command_play_youtubemusic_lyrics_description: string;
+    command_play_youtubemusic_lyrics_searching: string;
+    command_play_youtubemusic_lyrics_found: string;
+    command_play_youtubemusic_lyrics_not_found: string;
+    command_play_youtubemusic_lyrics_filename: string;
     command_play_any_url_or_title_required: string;
     command_play_any_title_no_video_found: string;
     command_play_any_title_now_playing: string;

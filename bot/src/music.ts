@@ -28,7 +28,7 @@ async function getStream(url: string, websiteType: string): Promise<{
     };
 }
 
-async function play(channel: discord.VoiceBasedChannel, url: string, websiteType: string) {
+async function play(channel: discord.VoiceBasedChannel, url: string, websiteType: string): Promise<browserWrapper.Page> {
     let guild = channel.guild;
 
     // if it is already playing, stop everything
@@ -83,6 +83,8 @@ async function play(channel: discord.VoiceBasedChannel, url: string, websiteType
         page,
         stream,
     };
+
+    return page;
 }
 
 async function playFromSoundboard(channel: discord.VoiceBasedChannel, filePath: string) {

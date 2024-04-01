@@ -5,6 +5,7 @@ import { lang } from './languages';
 import soundboard, { SOUNDBOARD_CUSTOM_ID_PREFIX } from './soundboard';
 import voiceChannels from './voice-channels';
 import search from './search';
+import lyrics from './lyrics';
 
 const interactionsNames = {
     PLAY: lang.command_play,
@@ -39,6 +40,9 @@ const interactions = [
                 .addStringOption(option => option.setName(lang.command_play_youtubemusic_url)
                     .setDescription(lang.command_play_youtubemusic_url_description)
                     .setRequired(false))
+                .addBooleanOption(option => option.setName(lang.command_play_youtubemusic_lyrics)
+                    .setDescription(lang.command_play_youtubemusic_lyrics_description)
+                    .setRequired(false))
                 .addStringOption(option => option.setName(lang.command_play_youtubemusic_title)
                     .setDescription(lang.command_play_youtubemusic_title_description)
                     .setRequired(false))),
@@ -55,6 +59,7 @@ const interactions = [
 
             let url = interaction.options.getString(lang.command_play_youtube_url, false);
             let title = interaction.options.getString(lang.command_play_youtube_title, false);
+            let showLyrics = interaction.options.getBoolean(lang.command_play_youtubemusic_lyrics, false);
             if (url === null && title === null) {
                 await interaction.reply(lang.command_play_any_url_or_title_required);
                 return;
@@ -62,25 +67,38 @@ const interactions = [
 
             await interaction.deferReply();
             let type = interaction.options.getSubcommand(true);
-            if (url !== null) {
-                await music.play(channel, url, type);
-                await interaction.editReply(lang.command_done);
-                return;
+            if (url === null) {
+                // here we can use the title since either url or
+                // title is mandatory; if url is null, title is not
+                url = await search.byWebsiteType(type, title!!);
             }
-            if (title === null) {
-                // here, title cannot be null since either url or
-                // title is mandatory; it will go ahead without
-                // problems
-                return;
-            }
-
-            let foundURL = await search.byWebsiteType(type, title);
-            if (!foundURL) {
+            if (!url) {
                 await interaction.reply(lang.command_play_any_title_no_video_found);
                 return;
             }
-            await music.play(channel, foundURL, type);
-            await interaction.editReply(`${lang.command_play_any_title_now_playing}${foundURL}`);
+            let page = await music.play(channel, url, type);
+            await interaction.editReply(`${lang.command_play_any_title_now_playing}${url}`);
+
+            // this next part is only executed if the user
+            // wants to see the lyrics
+            if (!showLyrics) return;
+            let textChannel = interaction.channel;
+            if (!textChannel) return;
+
+            // TODO FIX THE MESSAGES!!!
+            let message = await textChannel.send(lang.command_play_youtubemusic_lyrics_searching);
+            let foundLyrics = await lyrics.find(page, type);
+
+            let messageText = (foundLyrics) ? (lang.command_play_youtubemusic_lyrics_found) : (lang.command_play_youtubemusic_lyrics_not_found);
+            let files = (!foundLyrics) ? ([]) : ([{
+                attachment: Buffer.from(foundLyrics, 'utf-8'),
+                name: lang.command_play_youtubemusic_lyrics_filename,
+            }]);
+
+            await message.edit({
+                content: messageText,
+                files,
+            });
         },
     },
     {
